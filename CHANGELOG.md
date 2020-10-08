@@ -1,5 +1,25 @@
 # release notes
 
+## v0.5.4
+
+* Updated blueair API and added back in multi-purifier support
+
+## v0.5.3
+
+* Temporary removal of multi-purifier support because of API changes
+
+## v0.5.2
+
+* Bugfix for BlueAir API change
+
+## v0.5.1
+
+* Added auto configuration of supported elements of each purifier type.
+
+## v0.5.0
+
+* Added Sense and Aware support.
+
 ## v0.4.2
 
 * Added JSON checking before attempting to parse to ensure non-JSON responses don't crash.
