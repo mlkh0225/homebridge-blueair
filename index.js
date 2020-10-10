@@ -48,6 +48,8 @@ module.exports = function(homebridge) {
 		this.showCO2 = boolValueWithDefault(config.showCO2, false);
 		this.getHistoricalStats = boolValueWithDefault(config.getHistoricalStats, false);
 		this.showLED = boolValueWithDefault(config.showLED, true);
+		this.filterReplacementDate = config.filterReplacementDate;
+		this.filterLife = config.filterLife || 180;
 		
 		this.base_API_url = "https://api.blueair.io/v2/user/" + this.username + "/homehost/";
 		
@@ -461,9 +463,14 @@ module.exports = function(homebridge) {
 										var json = this.tryParseJSON(body);
 										this.appliance.info = json;
 										this.log.debug("Got device info");
+										if(!this.filterReplacementDate)
 										var filterusageindays = Math.round(((this.appliance.info.initUsagePeriod/60)/60)/24);
-										var filterlifeleft = (180 - filterusageindays);
-										this.appliance.filterlevel = 100* (filterlifeleft / 180);
+										else {
+											this.filterReplacementDate = new Date(this.filterReplacementDate).getTime();
+											var filterusageindays = Math.round((Number(Date.now()) - this.filterReplacementDate) / 1000 / 60 / 60 / 24);
+										}
+										var filterlifeleft = (this.filterLife - filterusageindays);
+										this.appliance.filterlevel = 100* (filterlifeleft / this.filterLife);
 										this.havedeviceInfo = 1;
 										this.lastInfoRefresh = new Date();
 										callback(null);
